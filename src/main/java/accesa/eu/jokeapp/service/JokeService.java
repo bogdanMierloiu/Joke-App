@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,9 +62,10 @@ public class JokeService {
 
     public String getRatingResponseFromGPT(String joke) {
         try {
-            URL url = new URL("https://europe-west4-nomadic-pathway-385517.cloudfunctions.net/internship?question=" + joke);
+            String encodedJoke = URLEncoder.encode(joke, StandardCharsets.UTF_8);
+            URL url = new URL("https://europe-west4-nomadic-pathway-385517.cloudfunctions.net/internship?question=" + encodedJoke);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
+            conn.setRequestMethod("GET");
             conn.connect();
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -124,7 +127,6 @@ public class JokeService {
         for (var c : response.toCharArray()) {
             if (Character.isDigit(c)) {
                 return (long) c;
-
             }
         }
         return -1L;

@@ -69,7 +69,9 @@ public class JokeController {
 
 
     private String composeQuestion(String setup, String punchline) {
-        return "Rate this joke from 1 to 5: " + setup + " " + punchline;
+        return "Acorda un rating (nr intreg) acestei glume, " +
+                "pe o scara de la 1 la 5, unde 1 este o gluma slaba si 5 este o gluma foarte buna: "
+                + setup + " " + punchline;
     }
 
 
