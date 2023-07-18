@@ -88,7 +88,7 @@ public class JokeController {
     }
 
     private String composeBookJokes(List<Joke> jokesList) {
-        StringBuilder bookToReview = new StringBuilder("Acorda un review scurt, intr-un singur rand, acestor 5 glume: ");
+        StringBuilder bookToReview = new StringBuilder("Give a very short review to this 5 jokes: ");
         for (var joke : jokesList) {
             bookToReview.append(joke.getSetup()).append(" ").append(joke.getPunchline()).append(",   ");
         }

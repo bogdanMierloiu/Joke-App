@@ -83,8 +83,7 @@ public class JokeService {
 
                 System.out.println(responseBuilder);
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                return objectMapper.readValue(responseBuilder.toString(), String.class);
+                return responseBuilder.toString();
             } else {
                 throw new RuntimeException("Failed to fetch joke: HTTP " + conn.getResponseCode());
             }
