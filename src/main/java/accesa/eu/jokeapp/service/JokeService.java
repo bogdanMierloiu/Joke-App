@@ -58,8 +58,37 @@ public class JokeService {
         return jokeBook;
     }
 
-    public JokeBook getJokeBookWithSameCategory(String type) {
-        int nrOfJokes = 5;
+    public String getRatingResponseFromGPT(String joke) {
+        try {
+            URL url = new URL("https://europe-west4-nomadic-pathway-385517.cloudfunctions.net/internship?question=" + joke);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.connect();
+
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = conn.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder responseBuilder = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    responseBuilder.append(line);
+                }
+
+                bufferedReader.close();
+                conn.disconnect();
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                return objectMapper.readValue(responseBuilder.toString(), String.class);
+            } else {
+                throw new RuntimeException("Failed to fetch joke: HTTP " + conn.getResponseCode());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to fetch joke", e);
+        }
+    }
+
+    public JokeBook getJokeBookWithSameCategory(String type, Long nrOfJokes) {
         List<Joke> jokes = new ArrayList<>();
         while (nrOfJokes > 0) {
             Joke joke = getJoke();
@@ -71,6 +100,34 @@ public class JokeService {
         JokeBook jokeBook = new JokeBook();
         jokeBook.getJokes().addAll(jokes);
         return jokeBook;
+    }
+
+    public JokeBook getJokeBookWithFirstCategory(Long nrOfJokes) {
+        List<Joke> jokes = new ArrayList<>();
+        Joke firstJoke = getJoke();
+        jokes.add(firstJoke);
+        nrOfJokes--;
+        String type = firstJoke.getType();
+        while (nrOfJokes > 0) {
+            Joke joke = getJoke();
+            if (joke.getType().equals(type)) {
+                jokes.add(joke);
+                nrOfJokes--;
+            }
+        }
+        JokeBook jokeBook = new JokeBook();
+        jokeBook.getJokes().addAll(jokes);
+        return jokeBook;
+    }
+
+    public Long getRatingFromResponse(String response) {
+        for (var c : response.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return (long) c;
+
+            }
+        }
+        return -1L;
     }
 
 

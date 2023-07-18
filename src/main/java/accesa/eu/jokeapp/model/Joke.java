@@ -18,4 +18,6 @@ public class Joke {
     private String punchline;
 
     private Integer id;
+
+    private Long rating;
 }
