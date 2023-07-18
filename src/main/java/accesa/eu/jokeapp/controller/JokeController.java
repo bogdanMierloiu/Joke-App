@@ -1,11 +1,14 @@
 package accesa.eu.jokeapp.controller;
 
+import accesa.eu.jokeapp.model.Joke;
 import accesa.eu.jokeapp.model.JokeBook;
 import accesa.eu.jokeapp.service.JokeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,7 +60,7 @@ public class JokeController {
         try {
             JokeBook jokeBook = jokeService.getJokeBook(nrOfJokes);
             for (var joke : jokeBook.getJokes()) {
-                String ratingResponseFromGPT = jokeService.getRatingResponseFromGPT(composeQuestion(joke.getSetup(), joke.getPunchline()));
+                String ratingResponseFromGPT = jokeService.getResponseFromGPT(composeQuestion(joke.getSetup(), joke.getPunchline()));
                 joke.setRating(jokeService.getRatingFromResponse(ratingResponseFromGPT));
             }
             return new ResponseEntity<>(jokeBook, HttpStatus.OK);
@@ -66,12 +69,30 @@ public class JokeController {
         }
     }
 
+    @GetMapping("/get-review")
+    public ResponseEntity<?> getReview() {
+        try {
+            JokeBook jokeBook = jokeService.getJokeBook(5L);
+            String responseFromGPT = jokeService.getResponseFromGPT(composeBookJokes(jokeBook.getJokes()));
+            return new ResponseEntity<>(responseFromGPT, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
 
     private String composeQuestion(String setup, String punchline) {
         return "Acorda un rating (nr intreg) acestei glume, " +
                 "pe o scara de la 1 la 5, unde 1 este o gluma slaba si 5 este o gluma foarte buna: "
                 + setup + " " + punchline;
+    }
+
+    private String composeBookJokes(List<Joke> jokesList) {
+        StringBuilder bookToReview = new StringBuilder("Acorda un review scurt, intr-un singur rand, acestor 5 glume: ");
+        for (var joke : jokesList) {
+            bookToReview.append(joke.getSetup()).append(" ").append(joke.getPunchline()).append(",   ");
+        }
+        return bookToReview.toString();
     }
 
 

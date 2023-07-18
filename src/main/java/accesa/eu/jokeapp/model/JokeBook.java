@@ -15,4 +15,5 @@ import java.util.List;
 public class JokeBook {
 
     private List<Joke> jokes = new ArrayList<>();
+
 }

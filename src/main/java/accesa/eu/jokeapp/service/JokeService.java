@@ -60,7 +60,7 @@ public class JokeService {
         return jokeBook;
     }
 
-    public String getRatingResponseFromGPT(String joke) {
+    public String getResponseFromGPT(String joke) {
         try {
             String encodedJoke = URLEncoder.encode(joke, StandardCharsets.UTF_8);
             URL url = new URL("https://europe-west4-nomadic-pathway-385517.cloudfunctions.net/internship?question=" + encodedJoke);
@@ -80,6 +80,8 @@ public class JokeService {
 
                 bufferedReader.close();
                 conn.disconnect();
+
+                System.out.println(responseBuilder);
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 return objectMapper.readValue(responseBuilder.toString(), String.class);
