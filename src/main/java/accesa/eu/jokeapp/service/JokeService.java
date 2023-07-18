@@ -126,7 +126,7 @@ public class JokeService {
     public Long getRatingFromResponse(String response) {
         for (var c : response.toCharArray()) {
             if (Character.isDigit(c)) {
-                return (long) c;
+                return Long.parseLong(String.valueOf(c));
             }
         }
         return -1L;
