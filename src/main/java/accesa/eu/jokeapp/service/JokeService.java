@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +55,21 @@ public class JokeService {
             Joke jokeToAdd = getJoke();
             jokeBook.getJokes().add(jokeToAdd);
         }
+        return jokeBook;
+    }
+
+    public JokeBook getJokeBookWithSameCategory(String type) {
+        int nrOfJokes = 5;
+        List<Joke> jokes = new ArrayList<>();
+        while (nrOfJokes > 0) {
+            Joke joke = getJoke();
+            if (joke.getType().equals(type)) {
+                jokes.add(joke);
+                nrOfJokes--;
+            }
+        }
+        JokeBook jokeBook = new JokeBook();
+        jokeBook.getJokes().addAll(jokes);
         return jokeBook;
     }
 

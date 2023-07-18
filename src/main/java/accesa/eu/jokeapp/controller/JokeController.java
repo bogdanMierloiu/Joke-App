@@ -20,7 +20,7 @@ public class JokeController {
             return new ResponseEntity<>(jokeService.getJoke(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("There was a problem!");
+                    .body(e.getMessage());
         }
     }
 
@@ -29,8 +29,19 @@ public class JokeController {
         try {
             return new ResponseEntity<>(jokeService.getJokeBook(nrOfJokes), HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There was a problem");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @GetMapping("/get-joke-book/{type}")
+    public ResponseEntity<?> getJokeBook(@PathVariable("type") String type) {
+        try {
+            return new ResponseEntity<>(jokeService.getJokeBookWithSameCategory(type), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
 
 }
