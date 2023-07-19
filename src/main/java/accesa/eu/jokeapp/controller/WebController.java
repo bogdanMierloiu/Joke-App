@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class WebController {
     }
 
 
-    @GetMapping("/get-joke-book/{nrOfJokes}")
+    @GetMapping("get-random-book/{nrOfJokes}")
     public String getJokeBook(@PathVariable("nrOfJokes") Long nrOfJokes, Model model) {
         JokeBook jokeBook = jokeService.getJokeBook(nrOfJokes);
         List<Joke> jokes = jokeBook.getJokes();

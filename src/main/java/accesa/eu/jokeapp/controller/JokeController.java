@@ -6,7 +6,10 @@ import accesa.eu.jokeapp.service.JokeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class JokeController {
     }
 
     private String composeBookJokes(List<Joke> jokesList) {
-        StringBuilder bookToReview = new StringBuilder("Give a very short review to this 5 jokes: ");
+        StringBuilder bookToReview = new StringBuilder("Give a very short  review to this 5 jokes: ");
         for (var joke : jokesList) {
             bookToReview.append(joke.getSetup()).append(" ").append(joke.getPunchline()).append(",   ");
         }

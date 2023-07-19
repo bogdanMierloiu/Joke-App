@@ -4,6 +4,7 @@ import accesa.eu.jokeapp.model.Joke;
 import accesa.eu.jokeapp.model.JokeBook;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JokeService {
 
+    @Async
     public Joke getJoke() {
         try {
             URL url = new URL("https://official-joke-api.appspot.com/random_joke");
@@ -80,7 +82,6 @@ public class JokeService {
 
                 bufferedReader.close();
                 conn.disconnect();
-
                 System.out.println(responseBuilder);
 
                 return responseBuilder.toString();
