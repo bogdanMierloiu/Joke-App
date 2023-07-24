@@ -4,8 +4,12 @@ import accesa.eu.jokeapp.model.Joke;
 import accesa.eu.jokeapp.model.JokeBook;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,6 +55,19 @@ public class JokeService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to fetch joke", e);
         }
+    }
+
+    public ResponseEntity<Joke> restGetJoke() {
+        RestTemplate restTemplate = new RestTemplate();
+        String apiUrl = "https://official-joke-api.appspot.com/random_joke";
+        ResponseEntity<Joke> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Joke>() {
+                }
+        );
+        return response;
     }
 
     public JokeBook getJokeBook(Long nrOfJokes) {
